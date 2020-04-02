@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FiArrowLeft } from 'react-icons/fi';
 
 import api from '../../services/api';
@@ -15,25 +15,29 @@ export default function Register() {
     const [city, setCity] = useState('');
     const [uf, setUf] = useState('');
 
-    function handleRegister(e) {
+    const history = useHistory();
+
+    async function handleRegister(e) {
         e.preventDefault();
 
-        const data = (
+
+        const data = {
             name,
             email,
             whatsapp,
             city,
             uf
-        )      
+        }
 
         try {
-            const response = api.post('/ongs', data);
+            const response = await api.post('ongs', data);
 
             alert(`Seu ID de acesso: ${response.data.id}`);
-            console.log(response.data.id)
+
+            history.push('/');
         } catch (err) {
             alert('Erro no cadastro, tente novamente.');
-            // console.log(response.data.id)
+            console.log(data)
         }
     };
 
